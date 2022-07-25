@@ -33,3 +33,62 @@ html {
   font-family: 'Montserrat';
   font-weight: 500;
 }
+
+.help {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  margin-bottom: 20px;
+  margin-right: 20px;
+  font-size: 50px;
+  background-color: #F2EDEB;
+}
+
+.modal {
+  position: absolute;
+  bottom: 2;
+  right: 2;
+  width: 500px;
+  background: #9893DA;
+  border: none;
+  border-radius: 20px;
+  padding: 20px;
+  transition: 4s ease-out;
+  box-shadow: -2rem 2rem 2rem rgba(0, 0, 0, 0.2);
+  filter: blur(0);
+  transform: scale(1);
+  opacity: 1;
+  visibility: visible;
+
+  font-size: 17px;
+  color: #F2EDEB;
+  text-align: center;
+  font-family: 'Montserrat';
+  font-weight: 500;
+}
+.modal.off {
+  opacity: 0;
+  visibility: hidden;
+  filter: blur(8px);
+  transform: scale(0.33);
+  box-shadow: 1rem 0 0 rgba(0, 0, 0, 0.2);
+}
+.modal h2{
+  font-size: 50px;
+  color: #F2EDEB;
+  text-align: center;
+  font-family: 'Montserrat';
+  font-weight: 700;
+  margin: 10px;
+}
+
+.modal button {
+  font-size: 20px;
+  border: none;
+  border-radius: 10px;
+  margin-top: 10px;
+}
+
+button:hover {
+    background-color: #9893DA;
+}
