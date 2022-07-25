@@ -1,11 +1,11 @@
 import React, { useEffect, useRef } from "react";
-import Drawing from "./Drawing";
 
 export function useOnDraw(onDraw, addDraw, eraseDraw) {
 
     const canvasRef = useRef(null);
     const isDrawingRef = useRef(false);
     const prevPointRef = useRef(null);
+    const modeRef = useRef('pen')
 
     const mouseMoveListenerRef = useRef(null);
     const mouseUpListenerRef = useRef(null);
@@ -20,6 +20,10 @@ export function useOnDraw(onDraw, addDraw, eraseDraw) {
 
     function onCanvasMouseDown() {
         isDrawingRef.current = true;
+    }
+
+    function switchMode(type) {
+        modeRef.current = type
     }
 
     useEffect(() => {
@@ -39,10 +43,15 @@ export function useOnDraw(onDraw, addDraw, eraseDraw) {
             const mouseMoveListener = (e) => {
                 if (isDrawingRef.current && canvasRef.current) {
                     const point = computePointInCanvas(e.clientX, e.clientY);
-                    currentDraw.current.push([point.x, point.y])
-                    const ctx = canvasRef.current.getContext('2d');
-                    if (onDraw) onDraw(ctx, point, prevPointRef.current);
-                    prevPointRef.current = point;
+
+                    if(modeRef.current === 'pen') {
+                        currentDraw.current.push([point.x, point.y])
+                        const ctx = canvasRef.current.getContext('2d');
+                        if (onDraw) onDraw(ctx, point, prevPointRef.current);
+                        prevPointRef.current = point;
+                    } else {
+                        eraseDraw([point.x, point.y])
+                    }
                 }
             }
             mouseMoveListenerRef.current = mouseMoveListener;
@@ -77,7 +86,8 @@ export function useOnDraw(onDraw, addDraw, eraseDraw) {
 
     return {
         setCanvasRef,
-        onCanvasMouseDown
+        onCanvasMouseDown,
+        switchMode
     }
 
 };
