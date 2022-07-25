@@ -1,6 +1,7 @@
-import { useEffect, useRef } from "react";
+import React, { useEffect, useRef } from "react";
+import Drawing from "./Drawing";
 
-export function useOnDraw(onDraw) {
+export function useOnDraw(onDraw, addDraw, eraseDraw) {
 
     const canvasRef = useRef(null);
     const isDrawingRef = useRef(false);
@@ -8,6 +9,10 @@ export function useOnDraw(onDraw) {
 
     const mouseMoveListenerRef = useRef(null);
     const mouseUpListenerRef = useRef(null);
+
+    const addDrawFunction = useRef(null)
+    const eraseDrawFunction = useRef(null)
+    const currentDraw = useRef([])
 
     function setCanvasRef(ref) {
         canvasRef.current = ref;
@@ -34,10 +39,10 @@ export function useOnDraw(onDraw) {
             const mouseMoveListener = (e) => {
                 if (isDrawingRef.current && canvasRef.current) {
                     const point = computePointInCanvas(e.clientX, e.clientY);
+                    currentDraw.current.push([point.x, point.y])
                     const ctx = canvasRef.current.getContext('2d');
                     if (onDraw) onDraw(ctx, point, prevPointRef.current);
                     prevPointRef.current = point;
-                    console.log(point);
                 }
             }
             mouseMoveListenerRef.current = mouseMoveListener;
@@ -48,6 +53,8 @@ export function useOnDraw(onDraw) {
             const listener = () => {
                 isDrawingRef.current = false;
                 prevPointRef.current = null;
+                addDraw(currentDraw.current)
+                currentDraw.current = []
             }
             mouseUpListenerRef.current = listener;
             window.addEventListener("mouseup", listener);

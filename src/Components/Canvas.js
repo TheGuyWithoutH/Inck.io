@@ -1,11 +1,19 @@
+import { useRef } from "react";
+import Drawing from "./Drawing";
 import { useOnDraw } from "./Hooks";
 
 const Canvas = ({width, height}) => {
 
     const {
+        setCanvasRefDraw,
+        addDraw,
+        eraseDraw,
+    } = Drawing()
+
+    const {
         setCanvasRef,
         onCanvasMouseDown
-    } = useOnDraw(onDraw);
+    } = useOnDraw(onDraw, addDraw, eraseDraw);
 
     function onDraw(ctx, point, prevPoint) {
         drawLine(prevPoint, point, ctx, 5, '#000000')
@@ -28,7 +36,7 @@ const Canvas = ({width, height}) => {
     }
 
     return (
-        <canvas width={width} height={height} style={canvasStyle} ref={setCanvasRef} onMouseDown={onCanvasMouseDown}/>
+        <canvas width={width} height={height} style={canvasStyle} ref={(ref) => {setCanvasRef(ref); setCanvasRefDraw(ref)}} onMouseDown={onCanvasMouseDown}/>
     )
 
 
